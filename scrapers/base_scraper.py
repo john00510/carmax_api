@@ -16,7 +16,7 @@ class BaseScraper(object):
         except: 
             traceback.print_exc()
         self.mysql_close()
-        self.clear_system()
+        #self.clear_system()
 
     def get_chromedriver(self, url, proxy):
         chrome_options = webdriver.ChromeOptions()
