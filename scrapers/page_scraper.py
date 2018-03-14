@@ -3,6 +3,7 @@ import time, traceback
 
 class PageScraper(BaseScraper):
     def __init__(self):
+        self.counter = 0
         self.proxy = '173.208.36.232'
         self.base_url = 'https://www.carmax.com/search#Distance=all&ExposedCategories=249+250+1001+1000+265+999+772&ExposedDimensions=249+250+1001+1000+265+999+772&Page=1&PerPage=50&SortKey=8&Zip=98036'
         BaseScraper.__init__(self)
@@ -11,15 +12,12 @@ class PageScraper(BaseScraper):
         self.set_is_prescraped()
         self.fh = open(self.base_dir + '/logs/page_scraper.log', 'w')
 
-        counter = 0
         driver = self.get_geckodriver(self.base_url, self.proxy, mode=True)
 
         while True:
-            counter += 1
-            print counter
             self.driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
             time.sleep(10)
-            self.scrape_page()
+            print self.scrape_page()
 
             try:
                 self.click_next_page()
@@ -55,9 +53,9 @@ class PageScraper(BaseScraper):
                 mileage = self.get_mileage(element)
                 year = self.get_year(element)
                 photos = self.get_photos(element)
-                color = self.get_color(element)
                 key_features = self.get_key_features(element)
                 key_specs = self.get_key_specs(element)
+                color = self.get_color(key_specs)
                 dealer = self.get_dealer(element)
                 nhtsa = self.get_nhtsa_frontal_rating(element)
                 review_num = self.get_reviews_num(element)
@@ -92,6 +90,8 @@ class PageScraper(BaseScraper):
                 self.fh.write(error)
 
         self.conn.commit()
+        self.counter += 1
+        return self.counter
 
     def get_source(self):
         return 'carmax.com'
@@ -172,14 +172,8 @@ class PageScraper(BaseScraper):
         element = _element.find_elements_by_xpath(element)[1]
         return element.get_attribute('innerHTML')
 
-    def get_color(self, _element):
-        try:
-            element = './/div[contains(@class, "slick-slide")]/a/img'
-            element = _element.find_element_by_xpath(element)
-            element = element.get_attribute('alt')
-            return element.split(' ')[0]
-        except:
-            return ''
+    def get_color(self, element):
+        return element.split(' ')[-1].split('/')[0]
 
     def get_base_specs(self, _element):
         #Vehicle Base specifications (grab all specifications)

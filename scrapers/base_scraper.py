@@ -16,7 +16,7 @@ class BaseScraper(object):
         except: 
             traceback.print_exc()
         self.mysql_close()
-        #self.clear_system()
+        self.clear_system()
 
     def get_chromedriver(self, url, proxy):
         chrome_options = webdriver.ChromeOptions()
@@ -43,7 +43,7 @@ class BaseScraper(object):
         return WebDriverWait(driver, delay).until(EC.visibility_of_element_located((By.XPATH, element)))
 
     def clear_system(self):
-        subprocess.call(['sudo pkill geckodriver ; sudo pkill firefox'], shell=True)
+        subprocess.call(['sudo pkill geckodriver ; sudo pkill firefox ; sudo pkill chromium-browse'], shell=True)
         subprocess.call(['sudo pkill chromedriver'], shell=True)
 
     def mysql_connect(self):
