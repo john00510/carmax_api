@@ -10,7 +10,7 @@ from settings import *
 class BaseScraper(object):
     def __init__(self):
         self.base_dir = base_dir
-        os.environ['DISPLAY'] = ':1'
+        #os.environ['DISPLAY'] = ':1'
         self.mysql_connect()
 
         try: 
@@ -45,9 +45,11 @@ class BaseScraper(object):
     def wait_visibility(self, driver, element, delay):
         return WebDriverWait(driver, delay).until(EC.visibility_of_element_located((By.XPATH, element)))
 
+    def wait_presence(self, driver, element, delay):
+        return WebDriverWait(driver, delay).until(EC.presence_of_element_located((By.XPATH, element)))
+
     def clear_system(self):
         subprocess.call(['sudo pkill geckodriver ; sudo pkill firefox ; sudo pkill chromium-browse'], shell=True)
-        subprocess.call(['sudo pkill chromedriver'], shell=True)
 
     def mysql_connect(self):
         self.conn = mdb.connect(
