@@ -25,7 +25,7 @@ class PageScraper(BaseScraper):
                 self.driver.quit()
                 break
 
-        self.delete_sold()
+#        self.delete_sold()
         self.fh.close()
 
     def scrape_page(self):
