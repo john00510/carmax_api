@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-import sys, subprocess, traceback
+import sys, os, subprocess, traceback
 import MySQLdb as mdb
 sys.path.append("..")
 from settings import *
@@ -10,11 +10,14 @@ from settings import *
 class BaseScraper(object):
     def __init__(self):
         self.base_dir = base_dir
+        os.environ['DISPLAY'] = ':1'
         self.mysql_connect()
+
         try: 
             self.main()
         except: 
             traceback.print_exc()
+
         self.mysql_close()
         self.clear_system()
 
