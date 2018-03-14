@@ -203,7 +203,7 @@ class PageScraper(BaseScraper):
 
     def click_next_page(self):
         element = '//a[@class="pagination--next"]'
-        self.wait_visibility(self.driver, element, 20).click()
+        self.wait_visibility(self.driver, element, 30).click()
 
 if __name__ == "__main__":
     PageScraper()
