@@ -51,7 +51,7 @@ class PageScraper(BaseScraper):
 
         query = """INSERT INTO cars(source, is_scraped, is_prescraped, make, model,
                 stock, vin, _condition, url, price, mileage, year, photos, color,
-                key_features, key_specs, dealer, nhtsa_rating, reviews) VALUES 
+                key_features, key_specs, dealer, nhtsa_rating, research_link) VALUES 
                 (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE price = %s, is_prescraped = %s"""
        
@@ -75,7 +75,7 @@ class PageScraper(BaseScraper):
                 color = self.get_color(key_specs)
                 dealer = self.get_dealer(element)
                 nhtsa = self.get_nhtsa_frontal_rating(element)
-                review_num = self.get_reviews_num(element)
+                research_link = self.get_research_link(make, model, year)
 
                 item = (
                     source,
@@ -96,7 +96,7 @@ class PageScraper(BaseScraper):
                     key_specs,
                     dealer,
                     nhtsa,
-                    review_num,
+                    research_link,
                     price, 
                     is_prescraped
                 )
@@ -158,12 +158,8 @@ class PageScraper(BaseScraper):
         element = _element.find_element_by_xpath(element).text
         return element
 
-    def get_reviews_num(self, _element):
-        element = './/span[@itemprop="reviewCount"] | .//span[contains(@class, "result--review-count")]'
-        return int(_element.find_element_by_xpath(element).text)
-
-    def get_reviews_link(self, _element):
-        return ""
+    def get_research_link(self, make, model, year):
+        return '{}/{}/{}'.format(make.lower(), model.replace(' ', '_').lower(), year) 
     
     def get_photos(self, _element):
         elements = './/div[contains(@class, "slick-slide")]/a/img'
