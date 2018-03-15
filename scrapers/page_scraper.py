@@ -4,7 +4,7 @@ import time, traceback
 class PageScraper(BaseScraper):
     def __init__(self):
         self.counter = 0
-        self.proxy = '173.208.36.232'
+        self.proxy = ''
         self.base_url = 'https://www.carmax.com/search#Distance=all&ExposedCategories=249+250+1001+1000+265+999+772&ExposedDimensions=249+250+1001+1000+265+999+772&Page=1&PerPage=50&SortKey=8&Zip=98036'
         BaseScraper.__init__(self)
 
@@ -15,8 +15,8 @@ class PageScraper(BaseScraper):
         driver = self.get_geckodriver(self.base_url, self.proxy, mode=True)
 
         while True:
+            time.sleep(5)
             self.driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-            time.sleep(10)
             print self.scrape_page()
 
             try:
