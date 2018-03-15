@@ -12,7 +12,7 @@ class PageScraper(BaseScraper):
         self.set_is_prescraped()
         self.fh = open(self.base_dir + '/logs/page_scraper.log', 'w')
 
-        driver = self.get_geckodriver(self.base_url, self.proxy, mode=True) ###############
+        driver = self.get_geckodriver(self.base_url, self.proxy, mode=True)
 
         while True:
             self.driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')

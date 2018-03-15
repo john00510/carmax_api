@@ -10,7 +10,9 @@ from settings import *
 class BaseScraper(object):
     def __init__(self):
         self.base_dir = base_dir
-        #os.environ['DISPLAY'] = ':1'
+        self.mode = mode
+        self.proxy = proxy
+        if self.mode != True: os.environ['DISPLAY'] = ':1'
         self.mysql_connect()
 
         try: 
@@ -21,19 +23,19 @@ class BaseScraper(object):
         self.mysql_close()
         self.clear_system()
 
-    def get_chromedriver(self, url, proxy):
+    def get_chromedriver(self, url):
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--proxy-server:{}'.format(proxy))
         self.driver = webdriver.Chrome(chrome_options=chrome_options)
         self.driver.get(url)
 
-    def get_geckodriver(self, url, proxy, mode):
-        if mode == True:
+    def get_geckodriver(self, url):
+        if self.mode == True:
             profile = webdriver.FirefoxProfile()
             profile.set_preference('network.proxy.type', 1)
-            profile.set_preference('network.proxy.http', proxy)
+            profile.set_preference('network.proxy.http', self.proxy)
             profile.set_preference('network.proxy.http_port', 3128)
-            profile.set_preference('network.proxy.ssl', proxy)
+            profile.set_preference('network.proxy.ssl', self.proxy)
             profile.set_preference('network.proxy.ssl_port', 3128)
             profile.update_preferences()
             self.driver = webdriver.Firefox(firefox_profile=profile)
@@ -62,3 +64,8 @@ class BaseScraper(object):
 
     def mysql_close(self):
         self.conn.close()
+
+    def get_status_code(self):
+        element = '/html/head/title'
+        return self.driver.find_element_by_xpath(element).get_attribute('innerHTML')
+

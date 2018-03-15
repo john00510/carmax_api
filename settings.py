@@ -6,3 +6,6 @@ user = 'cars'
 passwd = 'cars'
 db = 'cars'
 host = 'localhost'
+
+mode = True
+proxy = '173.208.36.232'
