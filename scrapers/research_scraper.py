@@ -44,16 +44,41 @@ class ResearchScraper(BaseScraper):
             self.scrape_page(year)
 
     def scrape_page(self, url):
-        print url
+# https://www.carmax.com/research/acura/ilx/2016
+        query = """ INSERT IGNORE INTO research(make, model, year, base_features, 
+            base_specs, reviews, jd_rating, link) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+
         self.get_geckodriver(url)
         time.sleep(5)
 
         if self.get_status_code() != '404 Error':
-            self.get_jd_rating()
-            self.get_reviews()
+            make = self.get_make(url)
+            model = self.get_model(url)
+            year = self.get_year(url)
+            link = self.get_research_link(make, model, year)
+            print link
+            #base_specs = self.get_base_specs()
+            #base_features = self.get_base_features()
+            #jd_rating = self.get_jd_rating()
+            #reviews = self.get_reviews()
             self.count += 1
 
         self.driver.quit()
+
+    def get_make(self, url):
+        return url.split('/')[-3]
+
+    def get_model(self, url):
+        return url.split('/')[-2]
+
+    def get_year(self, url):
+        return url.split('/')[-1]
+
+    def get_base_features(self):
+        return ''
+
+    def get_base_specs(self):
+        return ''
 
     def get_jd_rating(self):
         elements = '//div[@class="reliability-ratings-card--row"]/div'
@@ -64,7 +89,7 @@ class ResearchScraper(BaseScraper):
         print len(elements)
 
     def get_reviews(self):
-        pass
+        return ''
 
 if __name__ == "__main__":
     ResearchScraper()

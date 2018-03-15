@@ -69,3 +69,6 @@ class BaseScraper(object):
         element = '/html/head/title'
         return self.driver.find_element_by_xpath(element).get_attribute('innerHTML')
 
+    def get_research_link(self, make, model, year):
+        return '{}/{}/{}'.format(make.lower(), model.replace(' ', '-').lower(), year) 
+

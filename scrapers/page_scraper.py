@@ -4,7 +4,6 @@ import time, traceback
 class PageScraper(BaseScraper):
     def __init__(self):
         self.counter = 0
-        #self.base_url = 'https://www.carmax.com/search#Distance=all&ExposedCategories=249+250+1001+1000+265+999+772&ExposedDimensions=249+250+1001+1000+265+999+772&Page=1&PerPage=50&SortKey=8&Zip=98036'
         self.base_url = 'https://www.carmax.com/cars/'
         BaseScraper.__init__(self)
 
@@ -139,9 +138,6 @@ class PageScraper(BaseScraper):
     def is_prescraped(self):
         return 1
 
-    def get_trim_info(self, _element):
-        return ""
-
     def get_price(self, _element):
         element = './/div[@class="vehicle-browse--result--info"]'
         element = _element.find_element_by_xpath(element)
@@ -157,9 +153,6 @@ class PageScraper(BaseScraper):
         element = './/span[@itemprop="mileageFromOdometer"]'
         element = _element.find_element_by_xpath(element).text
         return element
-
-    def get_research_link(self, make, model, year):
-        return '{}/{}/{}'.format(make.lower(), model.replace(' ', '_').lower(), year) 
     
     def get_photos(self, _element):
         elements = './/div[contains(@class, "slick-slide")]/a/img'
@@ -188,21 +181,10 @@ class PageScraper(BaseScraper):
     def get_color(self, element):
         return element.split(' ')[-1].split('/')[0]
 
-    def get_base_specs(self, _element):
-        #Vehicle Base specifications (grab all specifications)
-        return ""
-
-    def get_base_features(self, _element):
-        return ""
-
     def get_nhtsa_frontal_rating(self, _element):
         element = './/a[contains(text(), "NHTSA")]'
         element = _element.find_element_by_xpath(element)
         return element.get_attribute('href')
-
-    def get_jd_power_rating(self, _element):
-        #J.D. Power Ratings
-        return ""
 
     def set_is_prescraped(self):
         query = """UPDATE cars SET is_prescraped = 0"""
