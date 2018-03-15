@@ -4,15 +4,32 @@ import time, traceback
 class PageScraper(BaseScraper):
     def __init__(self):
         self.counter = 0
-        self.base_url = 'https://www.carmax.com/search#Distance=all&ExposedCategories=249+250+1001+1000+265+999+772&ExposedDimensions=249+250+1001+1000+265+999+772&Page=1&PerPage=50&SortKey=8&Zip=98036'
+        #self.base_url = 'https://www.carmax.com/search#Distance=all&ExposedCategories=249+250+1001+1000+265+999+772&ExposedDimensions=249+250+1001+1000+265+999+772&Page=1&PerPage=50&SortKey=8&Zip=98036'
+        self.base_url = 'https://www.carmax.com/cars/'
         BaseScraper.__init__(self)
 
     def main(self):
         self.set_is_prescraped()
         self.fh = open(self.base_dir + '/logs/page_scraper.log', 'w')
+        self.get_makes()
+#        self.delete_sold()
+        self.fh.close()
 
+    def get_makes(self):
+        elements = '//h2[contains(text(), "Shop by Make")]/following-sibling::ul[@class="list"]/li/a'
+        self.get_geckodriver(self.base_url)
+        time.sleep(5)
+        elements = self.driver.find_elements_by_xpath(elements)
+        makes = [element.get_attribute('href') for element in elements]
+        self.driver.quit()
+
+        for make in makes:
+            self.scrape_make(make)        
+
+    def scrape_make(self, url):
+        make = url.split('/')[-1]
         start = time.time()
-        driver = self.get_geckodriver(self.base_url)
+        self.get_geckodriver(url)
 
         while True:
             time.sleep(5)
@@ -21,15 +38,12 @@ class PageScraper(BaseScraper):
 
             try:
                 end = time.time()
-                print page_num, end - start
+                print make, page_num, end - start
                 start = time.time()
                 self.click_next_page()
             except:
                 self.driver.quit()
                 break
-
-#        self.delete_sold()
-        self.fh.close()
 
     def scrape_page(self):
         elements = '//div[@class="vehicle-browse--result"]'
