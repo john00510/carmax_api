@@ -11,14 +11,18 @@ class PageScraper(BaseScraper):
         self.set_is_prescraped()
         self.fh = open(self.base_dir + '/logs/page_scraper.log', 'w')
 
+        start = time.time()
         driver = self.get_geckodriver(self.base_url)
 
         while True:
             time.sleep(5)
             self.driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-            print self.scrape_page()
+            page_num = self.scrape_page()
 
             try:
+                end = time.time()
+                print page_num, end - start
+                start = time.time()
                 self.click_next_page()
             except:
                 self.driver.quit()
