@@ -10,7 +10,7 @@ from settings import *
 class BaseScraper(object):
     def __init__(self):
         self.base_dir = base_dir
-        #os.environ['DISPLAY'] = ':1'
+        os.environ['DISPLAY'] = ':1'
         self.mysql_connect()
 
         try: 
