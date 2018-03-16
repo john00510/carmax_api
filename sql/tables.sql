@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS research (
     customer_reviews LONGTEXT,
     customer_rating VARCHAR(50),
     jd_rating VARCHAR(255),
+    nhtsa_rating VARCHAR(255),
     link VARCHAR(100),
     PRIMARY KEY (id),
     UNIQUE KEY link_key (link)

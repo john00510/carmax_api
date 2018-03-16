@@ -50,8 +50,8 @@ class PageScraper(BaseScraper):
 
         query = """INSERT INTO cars(source, is_scraped, is_prescraped, make, model,
                 stock, vin, _condition, url, price, mileage, year, photos, color,
-                key_features, key_specs, dealer, nhtsa_rating, research_link) VALUES 
-                (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                key_features, key_specs, dealer, research_link) VALUES 
+                (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 ON DUPLICATE KEY UPDATE price = %s, is_prescraped = %s"""
        
         for element in elements:
@@ -73,7 +73,6 @@ class PageScraper(BaseScraper):
                 key_specs = self.get_key_specs(element)
                 color = self.get_color(key_specs)
                 dealer = self.get_dealer(element)
-                nhtsa = self.get_nhtsa_frontal_rating(element)
                 research_link = self.get_research_link(make, model, year)
 
                 item = (
@@ -94,7 +93,6 @@ class PageScraper(BaseScraper):
                     key_features,
                     key_specs,
                     dealer,
-                    nhtsa,
                     research_link,
                     price, 
                     is_prescraped
@@ -180,11 +178,6 @@ class PageScraper(BaseScraper):
 
     def get_color(self, element):
         return element.split(' ')[-1].split('/')[0]
-
-    def get_nhtsa_frontal_rating(self, _element):
-        element = './/a[contains(text(), "NHTSA")]'
-        element = _element.find_element_by_xpath(element)
-        return element.get_attribute('href')
 
     def set_is_prescraped(self):
         query = """UPDATE cars SET is_prescraped = 0"""
