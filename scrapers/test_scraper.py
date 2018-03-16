@@ -1,55 +1,51 @@
-import requests
+from base_scraper import BaseScraper
+import time, json
 
-url = 'https://carmax.com/cars/acura'
-url = 'https://www.carmax.com/car/15527502'
-url = 'http://autos.vast.com/cars'
+class TestScraper(BaseScraper):
+    def __init__(self):
+        self.base_url = 'https://www.carmax.com/research/acura/ilx-hybrid/2013'
+        BaseScraper.__init__(self)
 
-with open('acura.html', 'w') as fh:
-    resp = requests.get(url) #, verify="/etc/ssl/certs/ca-certificates.crt")
-    fh.write(resp.text.encode('utf8'))
+    def main(self):
+        self.get_geckodriver(self.base_url)
+        self.get_ratings()
+        self.driver.quit()
 
-'''
-acura 993
-buick 1368
-chrysler 1229
-ford 5922
-honda 3504
-infinity 1485
-kia 2081
-lincoln 500
-mercury 26
-nissan 6598
-saturn 14
-subaru 929
-volvo 366
-audi 933
-cadillac 1245
-dodge 2698
-genesis 13
-hummer 1
-jaguar 167
-land rover 211
-mazda 883
-mini 476
-pontiac 14
-scion 231
-toyota 5677
-bmw 1936
-chevrolet 5436
-fiat 374
-gmc 1616
-hyundai 3067
-jeep 3146
-lexus 1930
-mercedes benz 1974
-mitsubishi 294
-porsche 150
-smart 98
-volkswagen 1255
+    def get_ratings(self):
+        link = '//a[contains(text(), "See All Ratings")]'
+        self.driver.find_element_by_xpath(link).click()
+        time.sleep(5)
+        elements = '//div[@class="research-page--section"]'
+        elements = self.driver.find_elements_by_xpath(elements)
+        ##### nhtsa safety rating
+        elements1 = './/div[@class="research-page--table-row"]'
+        elements1 = elements[0].find_elements_by_xpath(elements1)
+        self.nhtsa_rating = {}
 
-total cars: 58840
-total pages: 1177
-avg time page scrape: 39 min
-avg time car scrape: 
+        if len(elements1) > 0:
+            for row in elements1:
+                els = row.find_elements_by_xpath('./div')
+                label = els[0].text.strip()
+                var1 = els[1].find_element_by_xpath('./span').text.strip()
+                try:
+                    val1 = els[1].find_element_by_xpath('.//meta[@itemprop="ratingValue"]').get_attribute('content')
+                except:
+                    val1 = None
+                var2 = els[2].find_element_by_xpath('./span').text.strip()
+                try:
+                    val2 = els[2].find_element_by_xpath('.//meta[@itemprop="ratingValue"]').get_attribute('content')
+                except:
+                    val2 = None
 
+                self.nhtsa_rating[label]= {var1:  val1, var2: val2}
 
+            self.nhtsa_rating = json.dumps(self.nhtsa_rating)
+
+        ##### jd power reliability rating
+        elements2 = './/div[@class="research-page--table-row"]'
+        elements2 = elements[1].find_elements_by_xpath(elements2)
+        if len(elements2) > 0:
+            pass
+
+if __name__ == "__main__":
+    TestScraper()

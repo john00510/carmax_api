@@ -45,8 +45,8 @@ class ResearchScraper(BaseScraper):
 
     def scrape_page(self, url):
 # https://www.carmax.com/research/acura/ilx/2016
-        query = """ INSERT IGNORE INTO research(make, model, year, base_features, 
-            base_specs, reviews, jd_rating, link) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+        query = """ INSERT IGNORE INTO research(make, model, year, base_features, base_specs, customer_reviews, 
+            customer_rating, jd_rating, link) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
 
         self.get_geckodriver(url)
         time.sleep(5)
@@ -56,11 +56,11 @@ class ResearchScraper(BaseScraper):
             model = self.get_model(url)
             year = self.get_year(url)
             link = self.get_research_link(make, model, year)
-            print link
+            #jd_rating = self.get_jd_rating()
+            #customer_rating = self.get_customer_rating()
+            #customer_reviews = self.get_customer_reviews()
             #base_specs = self.get_base_specs()
             #base_features = self.get_base_features()
-            #jd_rating = self.get_jd_rating()
-            #reviews = self.get_reviews()
             self.count += 1
 
         self.driver.quit()
@@ -88,8 +88,10 @@ class ResearchScraper(BaseScraper):
 #            _elements = element.find_elements_by_xpath('./div')
         print len(elements)
 
-    def get_reviews(self):
+    def get_customer_reviews(self):
         return ''
+
+    def get_customer_rating(self):
 
 if __name__ == "__main__":
     ResearchScraper()
