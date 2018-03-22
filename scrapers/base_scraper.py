@@ -4,7 +4,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 import sys, os, subprocess, traceback
 import MySQLdb as mdb
-sys.path.append("..")
+#sys.path.append("..")
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from settings import *
 
 class BaseScraper(object):
