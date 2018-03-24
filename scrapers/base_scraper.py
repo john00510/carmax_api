@@ -14,6 +14,7 @@ class BaseScraper(object):
         self.mode = mode
         self.proxy = proxy
         if self.mode != True: os.environ['DISPLAY'] = ':1'
+        self.clear_system()
         self.mysql_connect()
 
         try: 
@@ -22,7 +23,7 @@ class BaseScraper(object):
             traceback.print_exc()
 
         self.mysql_close()
-        #self.clear_system()
+        self.clear_system()
 
     def get_chromedriver(self, url):
         chrome_options = webdriver.ChromeOptions()
