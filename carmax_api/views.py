@@ -19,7 +19,7 @@ def index():
 
 @app.route("/api/model")
 def carmax_api_model():
-    #model = request.url.split('/')[-1]
+    model = request.url.split('/')#[-1]
     data = "{'status': 'OK', 'mode': '{}'}"#.format(model)
     return json.dumps(data)
 
