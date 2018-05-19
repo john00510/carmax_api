@@ -24,7 +24,7 @@ def carmax_api_model():
     return json.dumps(data)
 
 @app.route("/api/type/*")
-def carmax_api_model():
+def carmax_api_type():
     _type = request.url.split('/')[-1]
     data = "{'status': 'OK', 'mode': '{}'}".format(_type)
     return json.dumps(data)
