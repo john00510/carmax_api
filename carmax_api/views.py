@@ -17,10 +17,11 @@ cur = conn.cursor()
 def index():
     return "Index Page"
 
-@app.route("/api/model")
+@app.route("/api/make")
 def carmax_api_model():
-    model = request.url.split('/')#[-1]
-    data = "{'status': 'OK', 'mode': '{}'}".format(model)
+    query = "SELECT make, COUNT(make) FROM CARS GROUP BY make"
+    cur.execute(query)
+    data = cur.fetchall()
     return json.dumps(data)
 
 @app.route("/api/type")
