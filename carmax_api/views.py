@@ -17,6 +17,11 @@ cur = conn.cursor()
 def index():
     return "Index Page"
 
+@app.route("/api/model")
+def carmax_api_model():
+    data = "{'status': 'OK', 'mode': 'model'}"
+    return json.dumps(data)
+
 @app.route("/api")
 def carmax_api():
     make = request.args.get('make', default = "*", type = str)
