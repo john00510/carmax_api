@@ -24,6 +24,9 @@ def carmax_api_model():
     data = cur.fetchall()
     return json.dumps(data)
 
+@app.route("/api/model")
+    return json.dumps("{'status': 'OK'}")
+
 @app.route("/api/type")
 def carmax_api_type():
     #_type = request.url.split('/')[-1]
