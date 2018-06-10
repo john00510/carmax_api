@@ -27,8 +27,10 @@ def carmax_api_make():
 @app.route("/api/model")
 def carmax_api_model():
     make = request.args.get('make')
-    query = "SELECT DISTINCT model FROM CARS WHERE make = '{}'"
-    return json.dumps("{'status': '%s'}" % make)
+    query = "SELECT DISTINCT model FROM CARS WHERE make = '{}'".format(make)
+    cur.execute(query)
+    data = cur.fetchall()
+    return json.dumps(data)
 
 @app.route("/api/type")
 def carmax_api_type():
