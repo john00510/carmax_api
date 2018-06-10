@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS cars (
     id INT NOT NULL AUTO_INCREMENT,
     make VARCHAR(100),
+    _type VARCHAR(100),
     model VARCHAR(100),
     _condition VARCHAR(50),
     source VARCHAR(100),
