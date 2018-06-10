@@ -18,7 +18,7 @@ def index():
     return "Index Page"
 
 @app.route("/api/make")
-def carmax_api_model():
+def carmax_api_make():
     query = "SELECT make, COUNT(make) FROM CARS GROUP BY make"
     cur.execute(query)
     data = cur.fetchall()
