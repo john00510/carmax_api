@@ -25,6 +25,7 @@ def carmax_api_model():
     return json.dumps(data)
 
 @app.route("/api/model")
+def carmax_api_model():
     return json.dumps("{'status': 'OK'}")
 
 @app.route("/api/type")
