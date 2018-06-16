@@ -3,3 +3,8 @@ SELECT cars.make, cars.model, cars._condition, cars.source, cars.url, cars.price
 FROM cars LEFT JOIN research 
 ON cars.research_link = research.link;
 
+CREATE OR REPLACE VIEW MODELS AS
+SELECT m.make, m.model, m.photo, c._count
+FROM models m 
+LEFT JOIN (SELECT model, count(model) _count FROM cars GROUP BY model) c 
+ON m.model = c.model ORDER BY m.make;

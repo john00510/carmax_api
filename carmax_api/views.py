@@ -27,7 +27,7 @@ def carmax_api_make():
 @app.route("/api/model")
 def carmax_api_model():
     make = request.args.get('make')
-    query = "SELECT model, COUNT(model) FROM CARS WHERE make = '{}' GROUP BY model".format(make)
+    query = "SELECT model, _count, photo FROM MODELS WHERE make = '{}'".format(make)
     cur.execute(query)
     data = cur.fetchall()
     return json.dumps(data)

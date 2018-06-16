@@ -24,6 +24,16 @@ CREATE TABLE IF NOT EXISTS cars (
     UNIQUE KEY url_key (url)
 );
 
+CREATE TABLE IF NOT EXISTS models (
+    id INT NOT NULL AUTO_INCREMENT,
+    make VARCHAR(100),
+    model VARCHAR(100),
+    type VARCHAR(100),
+    photo VARCHAR(255) default '/cdn/NotAvailableProfile.jpg',
+    PRIMARY KEY (id),
+    UNIQUE KEY model_key (model)
+); 
+
 CREATE TABLE IF NOT EXISTS research (
     id INT NOT NULL AUTO_INCREMENT,
     make VARCHAR(100),
